@@ -1,11 +1,9 @@
 package com.nfach98.covidmap
 
 import android.graphics.Color
-import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
 import com.cocoahero.android.geojson.Feature
 import com.cocoahero.android.geojson.Point
@@ -35,7 +33,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.InputStream
-import java.lang.ref.WeakReference
 import java.util.*
 
 
@@ -81,7 +78,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsListene
             }
 
             override fun onFailure(call: Call<ResponseKoordinatTitik>, t: Throwable) {
-                TODO("Not yet implemented")
+                Log.e("API Exception: ", t.toString())
             }
         })
     }
