@@ -1,6 +1,7 @@
 package com.nfach98.covidmap
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.mapbox.android.core.permissions.PermissionsListener
@@ -12,7 +13,12 @@ import com.mapbox.mapboxsdk.location.modes.RenderMode
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
 import com.mapbox.mapboxsdk.maps.Style
+import com.nfach98.covidmap.api.ApiMain
 import com.nfach98.covidmap.databinding.ActivityMainBinding
+import com.nfach98.covidmap.model.ResponseKoordinatLine
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsListener {
@@ -35,6 +41,20 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsListene
         binding.fabLoc.setOnClickListener {
             mapboxMap?.style?.let { style -> enableLocationComponent(style) }
         }
+
+        /*ApiMain().services.getKoordinatLine().enqueue(object : Callback<ResponseKoordinatLine> {
+            override fun onResponse(call: Call<ResponseKoordinatLine>, response: Response<ResponseKoordinatLine>) {
+                if(response.code() == 200) {
+                    response.body().let {
+                        Log.d("nama", it.toString())
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseKoordinatLine>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+        })*/
     }
 
     @SuppressWarnings("MissingPermission")
