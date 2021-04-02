@@ -26,6 +26,10 @@ import com.mapbox.mapboxsdk.style.sources.GeoJsonSource
 import com.nfach98.covidmap.api.ApiMain
 import com.nfach98.covidmap.databinding.ActivityMainBinding
 import com.nfach98.covidmap.model.ResponseKoordinatTitik
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -40,6 +44,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsListene
     private var mapboxMap: MapboxMap? = null
 
     private lateinit var binding: ActivityMainBinding
+
+    companion object {
+        fun convertStreamToString(`is`: InputStream?): String {
+            val scanner: Scanner = Scanner(`is`).useDelimiter("\\A")
+            return if (scanner.hasNext()) scanner.next() else ""
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,9 +102,21 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsListene
 
     override fun onMapReady(mapboxMap: MapboxMap) {
         this.mapboxMap = mapboxMap
-        mapboxMap.setStyle(Style.MAPBOX_STREETS) { style ->
-//            enableLocationComponent(style)
-            LoadGeoJson(this@MainActivity).execute()
+        mapboxMap.setStyle(Style.MAPBOX_STREETS) {
+//            enableLocationComponent(it)
+            GlobalScope.launch(Dispatchers.IO) {
+                val featureCollection: FeatureCollection
+
+                try {
+                    val inputStream: InputStream = this@MainActivity.assets.open("example.geojson")
+                    featureCollection = FeatureCollection.fromJson(convertStreamToString(inputStream))
+                    withContext(Dispatchers.Main){
+                        drawLines(featureCollection)
+                    }
+                } catch (exception: Exception) {
+                    Log.e("Exception: ", exception.toString())
+                }
+            }
         }
     }
 
@@ -116,7 +139,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsListene
 
     private fun drawLines(featureCollection: FeatureCollection) {
         if (mapboxMap != null) {
-            mapboxMap!!.getStyle { style: Style ->
+            mapboxMap?.getStyle { style: Style ->
                 if (featureCollection.features() != null) {
                     if (featureCollection.features()!!.size > 0) {
                         style.addSource(GeoJsonSource("line-source", featureCollection))
@@ -130,39 +153,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsListene
                 }
             }
         }
-    }
-
-    private class LoadGeoJson internal constructor(activity: MainActivity?) : AsyncTask<Void?, Void?, FeatureCollection?>() {
-        private val weakReference: WeakReference<MainActivity> = WeakReference(activity)
-
-        override fun onPostExecute(@Nullable featureCollection: FeatureCollection?) {
-            super.onPostExecute(featureCollection)
-            val activity: MainActivity? = weakReference.get()
-            if (activity != null && featureCollection != null) {
-                activity.drawLines(featureCollection)
-            }
-        }
-
-        companion object {
-            fun convertStreamToString(`is`: InputStream?): String {
-                val scanner: Scanner = Scanner(`is`).useDelimiter("\\A")
-                return if (scanner.hasNext()) scanner.next() else ""
-            }
-        }
-
-        override fun doInBackground(vararg params: Void?): FeatureCollection? {
-            try {
-                val activity: MainActivity? = weakReference.get()
-                if (activity != null) {
-                    val inputStream: InputStream = activity.assets.open("example.geojson")
-                    return FeatureCollection.fromJson(convertStreamToString(inputStream))
-                }
-            } catch (exception: Exception) {
-                Log.e("Exception: ", exception.toString())
-            }
-            return null
-        }
-
     }
 
     override fun onStart() {
