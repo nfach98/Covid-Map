@@ -1,11 +1,17 @@
 package com.nfach98.covidmap
 
+import android.graphics.Color
+import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
+import com.cocoahero.android.geojson.Feature
+import com.cocoahero.android.geojson.Point
 import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.android.core.permissions.PermissionsManager
+import com.mapbox.geojson.FeatureCollection
 import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions
 import com.mapbox.mapboxsdk.location.modes.CameraMode
@@ -13,12 +19,20 @@ import com.mapbox.mapboxsdk.location.modes.RenderMode
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
 import com.mapbox.mapboxsdk.maps.Style
+import com.mapbox.mapboxsdk.style.layers.LineLayer
+import com.mapbox.mapboxsdk.style.layers.Property
+import com.mapbox.mapboxsdk.style.layers.PropertyFactory
+import com.mapbox.mapboxsdk.style.sources.GeoJsonSource
 import com.nfach98.covidmap.api.ApiMain
 import com.nfach98.covidmap.databinding.ActivityMainBinding
-import com.nfach98.covidmap.model.ResponseKoordinatLine
+import com.nfach98.covidmap.model.ResponseKoordinatTitik
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.InputStream
+import java.lang.ref.WeakReference
+import java.util.*
 
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsListener {
@@ -42,19 +56,23 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsListene
             mapboxMap?.style?.let { style -> enableLocationComponent(style) }
         }
 
-        /*ApiMain().services.getKoordinatLine().enqueue(object : Callback<ResponseKoordinatLine> {
-            override fun onResponse(call: Call<ResponseKoordinatLine>, response: Response<ResponseKoordinatLine>) {
-                if(response.code() == 200) {
+        ApiMain().services.getKoordinatTitik().enqueue(object : Callback<ResponseKoordinatTitik> {
+            override fun onResponse(call: Call<ResponseKoordinatTitik>, response: Response<ResponseKoordinatTitik>) {
+                if (response.code() == 200) {
                     response.body().let {
-                        Log.d("nama", it.toString())
+                        val point = it?.lineCoordinats?.get(0)?.get(0)?.get(1)?.let { it1 -> Point(it.lineCoordinats[0][0][0], it1) }
+                        val feature = Feature(point)
+                        feature.identifier = "MyIdentifier"
+                        feature.properties = JSONObject()
+                        val geoJSON: JSONObject = feature.toJSON()
                     }
                 }
             }
 
-            override fun onFailure(call: Call<ResponseKoordinatLine>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseKoordinatTitik>, t: Throwable) {
                 TODO("Not yet implemented")
             }
-        })*/
+        })
     }
 
     @SuppressWarnings("MissingPermission")
@@ -73,7 +91,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsListene
 
     override fun onMapReady(mapboxMap: MapboxMap) {
         this.mapboxMap = mapboxMap
-        mapboxMap.setStyle(Style.MAPBOX_STREETS) { style -> enableLocationComponent(style) }
+        mapboxMap.setStyle(Style.MAPBOX_STREETS) { style ->
+//            enableLocationComponent(style)
+            LoadGeoJson(this@MainActivity).execute()
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>, grantResults: IntArray) {
@@ -91,6 +112,57 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsListene
             Toast.makeText(this, "Not granted", Toast.LENGTH_LONG).show()
             finish()
         }
+    }
+
+    private fun drawLines(featureCollection: FeatureCollection) {
+        if (mapboxMap != null) {
+            mapboxMap!!.getStyle { style: Style ->
+                if (featureCollection.features() != null) {
+                    if (featureCollection.features()!!.size > 0) {
+                        style.addSource(GeoJsonSource("line-source", featureCollection))
+                        style.addLayer(LineLayer("linelayer", "line-source")
+                            .withProperties(PropertyFactory.lineCap(Property.LINE_CAP_SQUARE),
+                                    PropertyFactory.lineJoin(Property.LINE_JOIN_MITER),
+                                    PropertyFactory.lineOpacity(.7f),
+                                    PropertyFactory.lineWidth(7f),
+                                    PropertyFactory.lineColor(Color.parseColor("#3bb2d0"))))
+                    }
+                }
+            }
+        }
+    }
+
+    private class LoadGeoJson internal constructor(activity: MainActivity?) : AsyncTask<Void?, Void?, FeatureCollection?>() {
+        private val weakReference: WeakReference<MainActivity> = WeakReference(activity)
+
+        override fun onPostExecute(@Nullable featureCollection: FeatureCollection?) {
+            super.onPostExecute(featureCollection)
+            val activity: MainActivity? = weakReference.get()
+            if (activity != null && featureCollection != null) {
+                activity.drawLines(featureCollection)
+            }
+        }
+
+        companion object {
+            fun convertStreamToString(`is`: InputStream?): String {
+                val scanner: Scanner = Scanner(`is`).useDelimiter("\\A")
+                return if (scanner.hasNext()) scanner.next() else ""
+            }
+        }
+
+        override fun doInBackground(vararg params: Void?): FeatureCollection? {
+            try {
+                val activity: MainActivity? = weakReference.get()
+                if (activity != null) {
+                    val inputStream: InputStream = activity.assets.open("example.geojson")
+                    return FeatureCollection.fromJson(convertStreamToString(inputStream))
+                }
+            } catch (exception: Exception) {
+                Log.e("Exception: ", exception.toString())
+            }
+            return null
+        }
+
     }
 
     override fun onStart() {
