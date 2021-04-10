@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">CovidMap</string>
     <string name="mapbox_access_token">pk.eyJ1IjoibmZhY2g5OCIsImEiOiJja214aGkzd2Uwb3o1MnBtOWR0c3NyMGJvIn0.yIkMVzbHjJBHp7UHH4r4wQ</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
 </resources>
