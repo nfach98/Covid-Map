@@ -9,12 +9,13 @@ import java.util.concurrent.TimeUnit
 
 class ApiMain {
     companion object {
-        private const val BASE_API_URL = "https://lawancovid-19.surabaya.go.id/"
+        private const val BASE_API_URL = "https://covidmapapi.fishmeind.com/"
     }
 
     private val client = OkHttpClient().newBuilder()
         .addInterceptor(HttpLoggingInterceptor().apply {
-            level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
+            level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
+                    else HttpLoggingInterceptor.Level.NONE
         })
         .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
@@ -26,7 +27,6 @@ class ApiMain {
         .client(client)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-
 
     val services: ApiServices = retrofit.create(ApiServices::class.java)
 }

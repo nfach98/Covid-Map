@@ -2,11 +2,8 @@ package com.nfach98.covidmap
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.cocoahero.android.geojson.Feature
-import com.cocoahero.android.geojson.Point
 import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.geojson.FeatureCollection
@@ -21,17 +18,7 @@ import com.mapbox.mapboxsdk.style.layers.LineLayer
 import com.mapbox.mapboxsdk.style.layers.Property
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource
-import com.nfach98.covidmap.api.ApiMain
 import com.nfach98.covidmap.databinding.ActivityMainBinding
-import com.nfach98.covidmap.model.ResponseKoordinatTitik
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.io.InputStream
 import java.util.*
 
@@ -64,7 +51,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsListene
             mapboxMap?.style?.let { style -> enableLocationComponent(style) }
         }
 
-        ApiMain().services.getKoordinatTitik().enqueue(object : Callback<ResponseKoordinatTitik> {
+        /*ApiMain().services.getKoordinatTitik().enqueue(object : Callback<ResponseKoordinatTitik> {
             override fun onResponse(call: Call<ResponseKoordinatTitik>, response: Response<ResponseKoordinatTitik>) {
                 if (response.code() == 200) {
                     response.body().let {
@@ -80,7 +67,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsListene
             override fun onFailure(call: Call<ResponseKoordinatTitik>, t: Throwable) {
                 Log.e("API Exception: ", t.toString())
             }
-        })
+        })*/
     }
 
     @SuppressWarnings("MissingPermission")
@@ -100,8 +87,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsListene
     override fun onMapReady(mapboxMap: MapboxMap) {
         this.mapboxMap = mapboxMap
         mapboxMap.setStyle(Style.MAPBOX_STREETS) {
-//            enableLocationComponent(it)
-            GlobalScope.launch(Dispatchers.IO) {
+            enableLocationComponent(it)
+            /*GlobalScope.launch(Dispatchers.IO) {
                 val featureCollection: FeatureCollection
 
                 try {
@@ -113,7 +100,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, PermissionsListene
                 } catch (exception: Exception) {
                     Log.e("Exception: ", exception.toString())
                 }
-            }
+            }*/
         }
     }
 
