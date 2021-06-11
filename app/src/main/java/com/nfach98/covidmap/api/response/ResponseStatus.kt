@@ -5,5 +5,8 @@ import com.google.gson.annotations.SerializedName
 
 data class ResponseStatus(
     @SerializedName("status")
-    val status: String
+    val status: String,
+
+    @SerializedName("error")
+    val error: String
 )

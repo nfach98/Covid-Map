@@ -12,4 +12,7 @@
     <color name="yellow_dark">#BD9E00</color>
     <color name="blue">#0A42A6</color>
     <color name="blue_dark">#032C75</color>
+
+    <color name="color_ok">#08CD39</color>
+    <color name="color_error">#CD0321</color>
 </resources>

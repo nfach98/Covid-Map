@@ -12,14 +12,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CovidMap">
-        <activity android:name=".SplashActivity">
+        <activity
+            android:name=".ChangeSecurityActivity"
+            android:label="Keamanan" />
+        <activity
+            android:name=".ChangeProfileActivity"
+            android:label="Ubah Profil" />
+        <activity android:name=".ui.main.profile.security.SecurityActivity" />
+        <activity android:name=".ui.main.profile.edit.EditActivity" />
+        <activity
+            android:name=".ui.main.MainActivity"
+            android:label="@string/title_activity_main2" />
+        <activity android:name=".ui.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <activity android:name=".MainActivity">
         </activity>
     </application>
 

@@ -23,7 +23,7 @@ data class ResponseUser(
     val name: String,
 
     @SerializedName("avatar")
-    val avatar: String,
+    val avatar: String?,
 
     @SerializedName("updated_at")
     val updatedAt: String,

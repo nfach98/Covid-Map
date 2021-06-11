@@ -4,4 +4,18 @@
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="name">Nama</string>
+    <string name="title_activity_main2">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="map">Peta</string>
+    <string name="profile">Profil</string>
+    <string name="history">Histori</string>
+    <string name="change_profile">Ubah Profil</string>
+    <string name="security">Keamanan</string>
+    <string name="logout">Logout</string>
+    <string name="message_logout">Apakah Anda yakin ingin logout dari CovidMap?</string>
+    <string name="cancel">Batal</string>
+    <string name="change_avatar">Ubah Foto</string>
+    <string name="update">Update</string>
 </resources>
