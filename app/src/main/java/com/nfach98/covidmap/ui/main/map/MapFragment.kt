@@ -89,7 +89,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, PermissionsListener {
                                 PropertyFactory.lineJoin(Property.LINE_JOIN_MITER),
                                 PropertyFactory.lineOpacity(.7f),
                                 PropertyFactory.lineWidth(7f),
-                                PropertyFactory.lineColor(Color.parseColor("#3bb2d0")))
+                                PropertyFactory.lineColor(Color.parseColor("#3bb2d0"))
+                            )
                         )
                     }
                 }
@@ -100,14 +101,14 @@ class MapFragment : Fragment(), OnMapReadyCallback, PermissionsListener {
     override fun onMapReady(mapboxMap: MapboxMap) {
         this.mapboxMap = mapboxMap
         mapboxMap.setStyle(Style.MAPBOX_STREETS) {
-//            enableLocationComponent(it)
+            enableLocationComponent(it)
             val token = UserToken.getToken(requireActivity().applicationContext)
             if (token != null) {
                 ApiMain().services.koordinatLine(token).enqueue(object : Callback<ResponseMap> {
                     override fun onResponse(call: Call<ResponseMap>, response: Response<ResponseMap>) {
                         if (response.code() == 200) {
-                            response.body().let {
-                                it?.featureCollection?.let { fc ->
+                            response.body().let { map ->
+                                map?.featureCollection?.let { fc ->
                                     drawLines(FeatureCollection.fromJson(fc))
                                 }
                             }

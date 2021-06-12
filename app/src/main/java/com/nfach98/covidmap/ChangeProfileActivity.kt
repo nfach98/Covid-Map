@@ -1,5 +1,6 @@
 package com.nfach98.covidmap
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -16,13 +17,20 @@ import com.nfach98.covidmap.ui.main.profile.ProfileFragment.Companion.EXTRA_NAME
 import com.nfach98.covidmap.ui.main.profile.ProfileFragment.Companion.EXTRA_TOKEN
 import com.nfach98.covidmap.ui.main.profile.ProfileFragment.Companion.EXTRA_USERNAME
 import com.squareup.picasso.Picasso
+import com.vansuita.pickimage.bundle.PickSetup
+import com.vansuita.pickimage.dialog.PickImageDialog
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 
 class ChangeProfileActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityChangeProfileBinding
+    private lateinit var file: File
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,11 +48,14 @@ class ChangeProfileActivity : AppCompatActivity() {
 
         binding.etProfileName.setText(name)
         binding.etProfileUsername.setText(username)
-        if (avatar == null) Picasso.get()
-                .load(R.drawable.drawable_person).into(
-                        binding.ivProfile
-                )
-        else Picasso.get().load(avatar).into(binding.ivProfile)
+        if (avatar == null)
+            Picasso.get()
+            .load(R.drawable.drawable_person)
+            .into(binding.ivProfile)
+        else
+            Picasso.get()
+            .load(avatar)
+            .into(binding.ivProfile)
 
         binding.etProfileUsername.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -99,6 +110,42 @@ class ChangeProfileActivity : AppCompatActivity() {
             }
 
         })
+
+        binding.btnProfileAvatar.setOnClickListener {
+            PickImageDialog.build(PickSetup())
+                .setOnPickResult { result ->
+                    Picasso.get().load(result.uri).fit().centerCrop().into(binding.ivProfile)
+                    file = File(cacheDir, "avatar.jpg")
+                    file.writeBitmap(result.bitmap, Bitmap.CompressFormat.JPEG, 85)
+                    Log.d("format", file.path)
+                }
+                .show(this)
+        }
+
+        binding.btnUpdate.setOnClickListener {
+            val nameNew = binding.etProfileName.text.toString()
+            val usernameNew = binding.etProfileUsername.text.toString()
+            val body = RequestBody.create("image/*".toMediaTypeOrNull(), file)
+            val part = MultipartBody.Part.createFormData("avatar", file.name, body)
+
+            if(token != null && nameNew.isNotEmpty() && usernameNew.isNotEmpty()){
+                ApiMain().services.update(token, nameNew, usernameNew, part).enqueue(object : Callback<ResponseStatus> {
+                    override fun onResponse(call: Call<ResponseStatus>, response: Response<ResponseStatus>) {
+                        if (response.code() == 200) {
+                            response.body().let { status ->
+                                if(status?.status != null){
+                                    finish()
+                                }
+                            }
+                        }
+                    }
+
+                    override fun onFailure(call: Call<ResponseStatus>, t: Throwable) {
+                        Log.e("API Exception: ", t.toString())
+                    }
+                })
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -119,6 +166,13 @@ class ChangeProfileActivity : AppCompatActivity() {
             binding.btnUpdate.isEnabled = false
             binding.btnUpdate.setTextColor(resources.getColor(android.R.color.black))
             binding.btnUpdate.backgroundTintList = AppCompatResources.getColorStateList(this, android.R.color.darker_gray)
+        }
+    }
+
+    private fun File.writeBitmap(bitmap: Bitmap, format: Bitmap.CompressFormat, quality: Int) {
+        outputStream().use { out ->
+            bitmap.compress(format, quality, out)
+            out.flush()
         }
     }
 }

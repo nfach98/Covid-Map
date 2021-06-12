@@ -1,15 +1,11 @@
 package com.nfach98.covidmap.api
 
-import com.mapbox.geojson.GeoJson
 import com.nfach98.covidmap.api.response.ResponseMap
 import com.nfach98.covidmap.api.response.ResponseStatus
 import com.nfach98.covidmap.api.response.ResponseUser
 import okhttp3.MultipartBody
 import retrofit2.Call
-import retrofit2.http.Header
-import retrofit2.http.POST
-import retrofit2.http.Part
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface ApiServices {
     /*@GET("area_pasien/load_koordinat_titik")
@@ -42,10 +38,13 @@ interface ApiServices {
         @Header("token") token: String,
     ): Call<ResponseUser>
 
+    @Multipart
     @POST("api/update")
     fun update(
         @Header("token") token: String,
-        @Part file: MultipartBody.Part
+        @Query("name") name: String,
+        @Query("username") username: String,
+        @Part file: MultipartBody.Part?
     ): Call<ResponseStatus>
 
     @POST("api/check-username")

@@ -30,6 +30,7 @@ class SplashActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         binding.btnLogin.setOnClickListener {
+            Log.d("AAA", "AAA")
             hideKeyboard()
             loading(true)
 
