@@ -133,4 +133,37 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_loading_block"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="100dp"
+        android:visibility="gone"
+        android:background="#CC2E2E2E">
+
+        <pl.bclogic.pulsator4droid.library.PulsatorLayout
+            android:id="@+id/pulsator"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:pulse_count="4"
+            app:pulse_duration="500"
+            app:pulse_repeat="0"
+            app:pulse_color="@color/yellow"
+            app:pulse_startFromScratch="false"
+            app:pulse_interpolator="Linear"/>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_launcher_foreground"
+            app:tint="@color/blue"
+            app:layout_constraintWidth_percent="0.4"
+            app:layout_constraintDimensionRatio="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

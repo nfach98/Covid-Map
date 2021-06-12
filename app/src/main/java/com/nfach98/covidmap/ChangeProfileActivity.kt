@@ -118,7 +118,6 @@ class ChangeProfileActivity : AppCompatActivity() {
                     Picasso.get().load(result.uri).fit().centerCrop().into(binding.ivProfile)
                     file = File(cacheDir, "avatar.jpg")
                     file.writeBitmap(result.bitmap, Bitmap.CompressFormat.JPEG, 85)
-                    Log.d("format", file.path)
                 }
                 .show(this)
         }
@@ -130,12 +129,19 @@ class ChangeProfileActivity : AppCompatActivity() {
             val part = MultipartBody.Part.createFormData("avatar", file.name, body)
 
             if(token != null && nameNew.isNotEmpty() && usernameNew.isNotEmpty()){
+                binding.layoutLoadingBlock.visibility = View.VISIBLE
+                binding.pulsator.start()
+
                 ApiMain().services.update(token, nameNew, usernameNew, part).enqueue(object : Callback<ResponseStatus> {
                     override fun onResponse(call: Call<ResponseStatus>, response: Response<ResponseStatus>) {
                         if (response.code() == 200) {
                             response.body().let { status ->
-                                if(status?.status != null){
+                                if(status?.status == "success"){
                                     finish()
+                                }
+                                else {
+                                    binding.layoutLoadingBlock.visibility = View.GONE
+                                    binding.pulsator.stop()
                                 }
                             }
                         }

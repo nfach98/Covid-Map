@@ -46,6 +46,10 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    override fun onStart() {
+        super.onStart()
         val token = UserToken.getToken(requireActivity().applicationContext)
 
         if (token != null) {
@@ -64,8 +68,8 @@ class ProfileFragment : Fragment() {
                                 binding.tvUsername.text = user.username
                                 if (user.avatar == null) Picasso.get()
                                     .load(R.drawable.drawable_person).into(
-                                    binding.ivProfile
-                                )
+                                        binding.ivProfile
+                                    )
                                 else Picasso.get().load("https://covidmapapi.fishmeind.com/${user.avatar}").into(binding.ivProfile)
 
                                 binding.tvChangeProfile.setOnClickListener {
@@ -106,7 +110,7 @@ class ProfileFragment : Fragment() {
                                                             }
                                                             (activity as MainActivity).binding.pulsator.stop()
                                                             (activity as MainActivity).binding.layoutLoadingBlock.visibility =
-                                                                    View.GONE
+                                                                View.GONE
                                                             activity?.finish()
 
                                                             startActivity(Intent(requireContext(), SplashActivity::class.java))
