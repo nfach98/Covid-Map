@@ -46,12 +46,8 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-    }
 
-    override fun onStart() {
-        super.onStart()
         val token = UserToken.getToken(requireActivity().applicationContext)
-
         if (token != null) {
             ApiMain().services.detail(token).enqueue(object : Callback<ResponseUser> {
                 override fun onResponse(
