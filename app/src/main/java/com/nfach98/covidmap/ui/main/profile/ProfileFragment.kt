@@ -66,7 +66,7 @@ class ProfileFragment : Fragment() {
                                     .load(R.drawable.drawable_person).into(
                                     binding.ivProfile
                                 )
-                                else Picasso.get().load(user.avatar).into(binding.ivProfile)
+                                else Picasso.get().load("https://covidmapapi.fishmeind.com/${user.avatar}").into(binding.ivProfile)
 
                                 binding.tvChangeProfile.setOnClickListener {
                                     val intent = Intent(requireContext(), ChangeProfileActivity::class.java)

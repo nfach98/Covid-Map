@@ -53,8 +53,9 @@ class ChangeProfileActivity : AppCompatActivity() {
             .load(R.drawable.drawable_person)
             .into(binding.ivProfile)
         else
+            Log.d("avatar", avatar)
             Picasso.get()
-            .load(avatar)
+            .load("https://covidmapapi.fishmeind.com/$avatar")
             .into(binding.ivProfile)
 
         binding.etProfileUsername.addTextChangedListener(object : TextWatcher {
