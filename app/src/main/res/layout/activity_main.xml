@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
-        android:background="@drawable/bg_bnv_yellow"
+        android:background="@color/yellow"
         app:menu="@menu/bottom_nav_menu"
         app:itemIconTint="@color/color_main_bnv"
         app:itemTextColor="@color/color_main_bnv"

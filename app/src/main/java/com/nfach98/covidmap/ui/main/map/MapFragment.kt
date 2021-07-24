@@ -1,6 +1,7 @@
 package com.nfach98.covidmap.ui.main.map
 
 import android.graphics.Color
+import android.graphics.PointF
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -30,27 +31,16 @@ import com.nfach98.covidmap.session.UserToken
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.InputStream
-import java.util.*
+
 
 class MapFragment : Fragment(), OnMapReadyCallback, PermissionsListener {
-    /*companion object {
-        fun convertStreamToString(`is`: InputStream?): String {
-            val scanner: Scanner = Scanner(`is`).useDelimiter("\\A")
-            return if (scanner.hasNext()) scanner.next() else ""
-        }
-    }*/
 
     private var permissionsManager: PermissionsManager? = PermissionsManager(this)
     private var mapboxMap: MapboxMap? = null
 
     private lateinit var binding: FragmentMapBinding
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         Mapbox.getInstance(requireActivity(), getString(R.string.mapbox_access_token))
 
         binding = FragmentMapBinding.inflate(inflater)
@@ -82,19 +72,30 @@ class MapFragment : Fragment(), OnMapReadyCallback, PermissionsListener {
             mapboxMap?.getStyle { style: Style ->
                 if (featureCollection.features() != null) {
                     if (featureCollection.features()!!.size > 0) {
-                        style.addSource(GeoJsonSource("line-source", featureCollection))
+                        style.addSource(GeoJsonSource(SOURCE_ID, featureCollection))
                         style.addLayer(
-                            LineLayer("linelayer", "line-source").withProperties(
+                            LineLayer(LAYER_ID, SOURCE_ID).withProperties(
                                 PropertyFactory.lineCap(Property.LINE_CAP_SQUARE),
                                 PropertyFactory.lineJoin(Property.LINE_JOIN_MITER),
                                 PropertyFactory.lineOpacity(.7f),
                                 PropertyFactory.lineWidth(7f),
-                                PropertyFactory.lineColor(Color.parseColor("#3bb2d0"))
+                                PropertyFactory.lineColor(Color.parseColor("#ff0000"))
                             )
                         )
                     }
                 }
             }
+        }
+    }
+
+    private fun onClickLine(screenPoint: PointF) : Boolean {
+        val features = mapboxMap?.queryRenderedFeatures(screenPoint, LAYER_ID)
+        return if (features!!.isNotEmpty()) {
+            Log.d("peta", features[0].toJson())
+            true
+        }
+        else {
+            false
         }
     }
 
@@ -109,7 +110,12 @@ class MapFragment : Fragment(), OnMapReadyCallback, PermissionsListener {
                         if (response.code() == 200) {
                             response.body().let { map ->
                                 map?.featureCollection?.let { fc ->
-                                    drawLines(FeatureCollection.fromJson(fc))
+                                    val featureCollection = FeatureCollection.fromJson(fc)
+                                    drawLines(featureCollection)
+                                }
+
+                                mapboxMap.addOnMapClickListener { point ->
+                                    onClickLine(mapboxMap.projection.toScreenLocation(point))
                                 }
                             }
                         }
@@ -121,10 +127,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, PermissionsListener {
 
                 })
             }
-
-            /*GlobalScope.launch(Dispatchers.IO) {
-
-            }*/
         }
     }
 
@@ -178,5 +180,10 @@ class MapFragment : Fragment(), OnMapReadyCallback, PermissionsListener {
     override fun onDestroy() {
         super.onDestroy()
         binding.mapView.onDestroy()
+    }
+
+    companion object {
+        const val SOURCE_ID = "line-source"
+        const val LAYER_ID = "linelayer"
     }
 }
