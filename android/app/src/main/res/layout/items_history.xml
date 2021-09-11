@@ -12,7 +12,7 @@
         android:layout_height="24dp"
         android:layout_marginTop="20dp"
         android:layout_marginStart="12dp"
-        android:src="@drawable/ic_baseline_my_location_24"
+        android:src="@drawable/ic_baseline_my_location_yellow_24"
         app:tint="@color/blue"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>

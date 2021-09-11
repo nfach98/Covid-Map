@@ -17,6 +17,10 @@ html, body {
   background: var(--blue);
 }
 
+img{
+  object-fit: cover;
+}
+
 .navbar-dark{
   background-color: var(--blue);
 }
@@ -83,6 +87,21 @@ html, body {
 .btn.btn-primary:active:focus {
     background-color: var(--yellow-dark) !important;
     color: var(--blue-dark);
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.btn-secondary{
+  background-color: var(--blue);
+  color: white;
+}
+
+.btn.btn-secondary:active,
+.btn.btn-secondary:hover,
+.btn.btn-secondary:focus,
+.btn.btn-secondary:active:focus {
+    background-color: var(--blue) !important;
+    color: white;
     border-color: transparent;
     box-shadow: none;
 }
@@ -223,14 +242,39 @@ a:focus{
   -moz-box-shadow: 0px 2px 25px 0px rgba(0,0,0,.3) !important;
 }
 
+.dropdown-item {
+  color: var(--blue);
+}
+
+.dropdown-item:active,
+.dropdown-item:hover,
+.dropdown-item:focus,
+.dropdown-item:active:focus {
+  color: var(--yellow);
+  background-color: var(--blue-dark);
+}
+
 .circle-img {
   display: block;
   max-width: 15rem;
   max-height: 15rem;
-  width: auto;
-  height: auto;
   margin: .5rem;
   border-radius: 50%;
+}
+
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: block;
+  max-width: 30vw;
+}
+
+.upload-btn-wrapper input[type=file] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
 }
 
 @media only screen and (max-width: 600px) {

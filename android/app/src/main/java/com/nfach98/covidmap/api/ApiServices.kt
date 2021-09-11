@@ -3,6 +3,7 @@ package com.nfach98.covidmap.api
 import com.nfach98.covidmap.api.response.ResponseMap
 import com.nfach98.covidmap.api.response.ResponseStatus
 import com.nfach98.covidmap.api.response.ResponseUser
+import com.nfach98.covidmap.model.History
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -57,4 +58,24 @@ interface ApiServices {
     fun koordinatLine(
         @Header("token") token: String
     ): Call<ResponseMap>
+
+    @POST("api/get-history")
+    fun getHistory(
+        @Header("token") token: String
+    ): Call<ArrayList<History>>
+
+    @POST("api/add-history")
+    fun addHistory(
+        @Header("token") token: String,
+        @Query("from") from: String,
+        @Query("to") to: String
+    ): Call<ResponseStatus>
+
+    @POST("api/update-kondisi")
+    fun updateKondisi(
+        @Header("token") token: String,
+        @Query("jarak_12") jarak12: Int,
+        @Query("jarak_34") jarak34: Int,
+        @Query("jarak_masuk") jarakmasuk: Int
+    ): Call<ResponseStatus>
 }

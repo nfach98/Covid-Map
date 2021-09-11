@@ -13,11 +13,6 @@ class HistoryController extends Controller
 {
     public $successStatus = 200;
 
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function index()
     {
         $histories = History::where('id_user', Auth::user()->id)
@@ -38,8 +33,7 @@ class HistoryController extends Controller
         }
 
         if($request->header('token')){
-            $query = User::select('name', 'username', 'avatar', 'api_token AS token')
-            ->where('api_token', $request->header('token'));
+            $query = User::where('api_token', $request->header('token'));
             $user = $query->first();
 
             if($user) {
@@ -50,7 +44,11 @@ class HistoryController extends Controller
 	                'id_user' => $user->id
 	            ]);
 
-	            return $history;
+                if($history == 1) {
+                    return response()->json(['status' => 'success'], 200);
+                }
+
+	            return response()->json(['status' => 'failed'], 200);
             } else {
                 return response()->json(['error' => 'unauthorized'], 401);
             }
@@ -71,15 +69,18 @@ class HistoryController extends Controller
         }
 
         if($request->header('token')){
-            $query = User::select('name', 'username', 'avatar', 'api_token AS token')
-            ->where('api_token', $request->header('token'));
+            $query = User::where('api_token', $request->header('token'));
             $user = $query->first();
 
             if($user) {
                $history = History::where('id', $request->id)
                ->where('id_user', $user->id)
                ->delete();
-	           return $status;
+	           if($history == 1) {
+                    return response()->json(['status' => 'success'], 200);
+                }
+
+                return response()->json(['status' => 'failed'], 200);
             } else {
                 return response()->json(['error' => 'unauthorized'], 401);
             }
@@ -92,8 +93,7 @@ class HistoryController extends Controller
     public function get(Request $request)
     {
         if($request->header('token')){
-            $query = User::select('name', 'username', 'avatar', 'api_token AS token')
-            ->where('api_token', $request->header('token'));
+            $query = User::where('api_token', $request->header('token'));
             $user = $query->first();
 
             if($user) {

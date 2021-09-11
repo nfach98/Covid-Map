@@ -9,8 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.nfach98.covidmap.ChangeProfileActivity
-import com.nfach98.covidmap.ChangeSecurityActivity
+import com.nfach98.covidmap.ui.ChangeProfileActivity
+import com.nfach98.covidmap.ui.ChangeSecurityActivity
 import com.nfach98.covidmap.R
 import com.nfach98.covidmap.api.ApiMain
 import com.nfach98.covidmap.api.response.ResponseStatus

@@ -1,6 +1,5 @@
 package com.nfach98.covidmap.ui.main.history
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -53,7 +52,11 @@ class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() 
 
     inner class HistoryViewHolder(private val binding: ItemsHistoryBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(history: History){
-
+            with(binding){
+                tvFrom.text = history.from
+                tvTo.text = history.to
+                tvTime.text = history.date
+            }
         }
     }
 

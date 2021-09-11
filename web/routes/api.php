@@ -22,16 +22,14 @@ Route::post('login', [App\Http\Controllers\UserController::class, 'login']);
 Route::post('register', [App\Http\Controllers\UserController::class, 'register']);
 Route::post('logout', [App\Http\Controllers\UserController::class, 'logout']);
 Route::post('detail', [App\Http\Controllers\UserController::class, 'detail']);
+Route::post('kontrol', [App\Http\Controllers\UserController::class, 'detail_by_id']);
 Route::post('update', [App\Http\Controllers\UserController::class, 'update']);
 Route::post('check-username', [App\Http\Controllers\UserController::class, 'check_username']);
+Route::post('update-kondisi', [App\Http\Controllers\UserController::class, 'update_kondisi']);
 
-Route::post('koord-titik', [App\Http\Controllers\MapController::class, 'titik']);
-Route::post('koord-line', [App\Http\Controllers\MapController::class, 'line']);
+Route::post('koord-titik', [App\Http\Controllers\HomeController::class, 'titik']);
+Route::post('koord-line', [App\Http\Controllers\HomeController::class, 'line']);
 
 Route::post('add-history', [App\Http\Controllers\HistoryController::class, 'add']);
 Route::post('remove-history', [App\Http\Controllers\HistoryController::class, 'remove']);
 Route::post('get-history', [App\Http\Controllers\HistoryController::class, 'get']);
-
-/*Route::group(['middleware' => 'auth:api'], function(){
-	Route::post('details', [App\Http\Controllers\UserController::class, 'details']);
-});*/

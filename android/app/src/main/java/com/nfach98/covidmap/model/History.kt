@@ -3,7 +3,7 @@ package com.nfach98.covidmap.model
 import com.google.gson.annotations.SerializedName
 
 data class History (
-    @SerializedName("from")
+    @SerializedName("location_from")
     val from: String,
 
     @SerializedName("lat_from")
@@ -12,7 +12,7 @@ data class History (
     @SerializedName("lng_from")
     val fromLng: Float,
 
-    @SerializedName("to")
+    @SerializedName("location_to")
     val to: String,
 
     @SerializedName("lat_to")
@@ -21,7 +21,7 @@ data class History (
     @SerializedName("lng_to")
     val toLng: Float,
 
-    @SerializedName("date")
+    @SerializedName("datetime")
     val date: String,
 
     @SerializedName("id")

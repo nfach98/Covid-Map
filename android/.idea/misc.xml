@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Makaryo/2021/CovidMap/android/app/src/main/res/drawable/background_bottom_sheet.xml" value="0.2703125" />
+        <entry key="..\:/Makaryo/2021/CovidMap/android/app/src/main/res/drawable/background_rounded_rectangle.xml" value="0.2703125" />
+        <entry key="..\:/Makaryo/2021/CovidMap/android/app/src/main/res/drawable/ic_baseline_location_on_24.xml" value="0.2703125" />
+        <entry key="..\:/Makaryo/2021/CovidMap/android/app/src/main/res/drawable/ic_baseline_map_24.xml" value="0.14635416666666667" />
+        <entry key="..\:/Makaryo/2021/CovidMap/android/app/src/main/res/drawable/ic_baseline_map_blue_24.xml" value="0.14635416666666667" />
+        <entry key="..\:/Makaryo/2021/CovidMap/android/app/src/main/res/drawable/ic_outline_circle_24.xml" value="0.2703125" />
+        <entry key="..\:/Makaryo/2021/CovidMap/android/app/src/main/res/drawable/shape_rounded_rectangle.xml" value="0.2703125" />
+        <entry key="..\:/Makaryo/2021/CovidMap/android/app/src/main/res/layout/activity_geolocation.xml" value="0.2" />
+        <entry key="..\:/Makaryo/2021/CovidMap/android/app/src/main/res/layout/activity_main.xml" value="0.15534420289855072" />
+        <entry key="..\:/Makaryo/2021/CovidMap/android/app/src/main/res/layout/activity_navigation.xml" value="0.25416666666666665" />
+        <entry key="..\:/Makaryo/2021/CovidMap/android/app/src/main/res/layout/activity_splash.xml" value="0.1" />
+        <entry key="..\:/Makaryo/2021/CovidMap/android/app/src/main/res/layout/dialog_logout.xml" value="0.15715579710144928" />
+        <entry key="..\:/Makaryo/2021/CovidMap/android/app/src/main/res/layout/fragment_map.xml" value="0.2" />
+        <entry key="..\:/Makaryo/2021/CovidMap/android/app/src/main/res/layout/item_geolocation.xml" value="0.2" />
+        <entry key="..\:/Makaryo/2021/CovidMap/android/app/src/main/res/layout/items_history.xml" value="0.14402173913043478" />
+        <entry key="..\:/Makaryo/2021/CovidMap/android/app/src/main/res/layout/layout_bottom_sheet_confirm.xml" value="0.24320652173913043" />
+        <entry key="..\:/Makaryo/2021/CovidMap/android/app/src/main/res/layout/layout_bottom_sheet_map.xml" value="0.15715579710144928" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

@@ -47,9 +47,15 @@ class ProfilController extends Controller
                 ->count();
 
             if($unique == 0){
+                $file = $request->file('avatar');
+                $upload_dir = 'uploads';
+                $filename = "avatar_" . md5($query->id) . "." . $file->getClientOriginalExtension();
+                $file->move($upload_dir, $filename);
+
                 $query->update([
                     'name' => $request->name,
-                    'username' => $request->username
+                    'username' => $request->username,
+                    'avatar' => $upload_dir . "/" . $filename
                 ]);
                 Session::flash('success_msg', 'User details updated successfully!');
                 return redirect()->back()->with('success', 'Berhasil mengubah profil');

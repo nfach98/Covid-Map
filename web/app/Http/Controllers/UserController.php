@@ -96,7 +96,7 @@ class UserController extends Controller
     public function detail(Request $request)
     {
         if($request->header('token')){
-            $query = User::select('name', 'username', 'avatar', 'api_token AS token')
+            $query = User::select('name', 'username', 'avatar', 'jarak_1/2', 'jarak_3/4', 'jarak_masuk', 'api_token AS token')
             ->where('api_token', $request->header('token'));
             $user = $query->first();
 
@@ -107,6 +107,19 @@ class UserController extends Controller
             }
         }
         else{
+            return response()->json(['error' => 'unauthorized'], 401);
+        }
+    }
+
+    public function detail_by_id(Request $request)
+    {
+        $query = User::select('name', 'username', 'avatar', 'jarak_1/2', 'jarak_3/4', 'jarak_masuk', 'api_token AS token')
+        ->where('id', $request->id);
+        $user = $query->first();
+
+        if($user) {
+            return $user;
+        } else {
             return response()->json(['error' => 'unauthorized'], 401);
         }
     }
@@ -157,6 +170,47 @@ class UserController extends Controller
                 }
                 return response()->json(['error' => 'unavailable'], 401);
  
+            } 
+            else {
+                return response()->json(['error' => 'unauthorized'], 401);
+            }
+        }
+        else{
+            return response()->json(['error' => 'unauthorized'], 401);
+        }
+    }
+
+    public function update_kondisi(Request $request)
+    {
+        if($request->header('token')){
+
+            $validator = Validator::make($request->all(), [
+                'jarak_12' => 'required',
+                'jarak_34' => 'required',
+                'jarak_masuk' => 'required'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['error' => $validator->errors()], 401);            
+            }
+
+            $query = User::where('api_token', $request->header('token'));
+            $user = $query->first();
+
+            if($user) {
+                $update = $query->update([
+                    'jarak_1/2' => $request->jarak_12,
+                    'jarak_3/4' => $request->jarak_34,
+                    'jarak_masuk' => $request->jarak_masuk
+                ]);
+
+                if($update == 1) {
+                    return response()->json([
+                        'status' => 'success'
+                    ], $this->successStatus);
+                }
+
+                return response()->json(['status' => 'error'], 401);
             } 
             else {
                 return response()->json(['error' => 'unauthorized'], 401);

@@ -34,6 +34,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/bg_top"/>
 
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/rv_history"
+        app:layout_constraintTop_toTopOf="@id/bg_curve"
+        app:layout_constraintEnd_toEndOf="@id/rv_history"
+        app:layout_constraintBottom_toBottomOf="@id/rv_history"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_history"
         android:layout_width="match_parent"

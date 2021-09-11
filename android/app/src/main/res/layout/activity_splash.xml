@@ -254,7 +254,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:pulse_count="4"
-            app:pulse_duration="500"
+            app:pulse_duration="1000"
             app:pulse_repeat="0"
             app:pulse_color="@color/yellow"
             app:pulse_startFromScratch="false"
